@@ -841,12 +841,12 @@ const slides = [
     // 5: AI Academy - AI Аватары
     ({ dark = true }) => (
         <Slide dark={dark}>
-            <div style={{ marginBottom: 20 }}>
+            <div style={{ marginBottom: 12 }}>
                 <Logo dark={dark} />
             </div>
             <SectionLabel dark number="01">AI Academy</SectionLabel>
             <SlideTitle dark size="medium">Лучшие умы — ваши преподаватели</SlideTitle>
-            <div style={{ flex: 1, display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24 }}>
+            <div style={{ flex: 1, display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20, minHeight: 0 }}>
                 {[
                     { name: 'Исаак Ньютон', subject: 'Физика и математика', img: 'Media/ИИ-аватары/Исаак4.png' },
                     { name: 'Абай Кунанбаев', subject: 'Казахская литература и философия', img: 'Media/ИИ-аватары/Абай кунанбаев.png' },
@@ -854,11 +854,12 @@ const slides = [
                 ].map((person, i) => (
                     <div key={i} style={{
                         background: C.darkCard,
-                        borderRadius: 20,
+                        borderRadius: 16,
                         border: `1px solid ${C.border}`,
                         overflow: 'hidden',
                         display: 'flex',
-                        flexDirection: 'column'
+                        flexDirection: 'column',
+                        minHeight: 0
                     }}>
                         <div style={{
                             flex: 1,
@@ -877,16 +878,16 @@ const slides = [
                                 objectPosition: 'top center'
                             }} />
                         </div>
-                        <div style={{ padding: 16, textAlign: 'center' }}>
+                        <div style={{ padding: '12px 14px', textAlign: 'center', flexShrink: 0 }}>
                             <div style={{
-                                fontSize: 18,
+                                fontSize: 16,
                                 fontWeight: 600,
                                 fontFamily: F.heading,
                                 color: C.white,
-                                marginBottom: 6
+                                marginBottom: 4
                             }}>{person.name}</div>
                             <div style={{
-                                fontSize: 13,
+                                fontSize: 12,
                                 color: C.primary,
                                 fontFamily: F.body
                             }}>{person.subject}</div>
@@ -900,22 +901,22 @@ const slides = [
     // 6: AI Academy - Как это работает
     ({ dark = true }) => (
         <Slide dark={dark}>
-            <div style={{ marginBottom: 20 }}>
+            <div style={{ marginBottom: 12 }}>
                 <Logo dark={dark} />
             </div>
             <SectionLabel dark number="01">AI Academy</SectionLabel>
             <SlideTitle dark size="medium">Как это работает</SlideTitle>
-            <div style={{ flex: 1, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 36 }}>
-                <div>
+            <div style={{ flex: 1, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 28, minHeight: 0 }}>
+                <div style={{ display: 'flex', flexDirection: 'column', minHeight: 0 }}>
                     <p style={{
-                        fontSize: 14,
+                        fontSize: 13,
                         color: 'rgba(255,255,255,0.55)',
-                        lineHeight: 1.6,
-                        marginBottom: 24
+                        lineHeight: 1.5,
+                        marginBottom: 16
                     }}>
                         Ученик регистрируется, выбирает направление и начинает обучение. Платформа ведёт его от первого урока до финального проекта.
                     </p>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 12, flex: 1, minHeight: 0 }}>
                         <FlowStep
                             number="1"
                             title="Ученик выбирает специализацию"
@@ -945,11 +946,12 @@ const slides = [
                 <div style={{
                     background: C.darkCard,
                     borderRadius: 16,
-                    padding: 24,
+                    padding: 16,
                     border: `1px solid ${C.border}`,
                     display: 'flex',
                     flexDirection: 'column',
-                    gap: 14
+                    gap: 10,
+                    alignSelf: 'start'
                 }}>
                     <div style={{
                         fontSize: 11,
@@ -1676,7 +1678,7 @@ const slides = [
         </Slide>
     ),
 
-    // ==================== TRANSFORNATION KZ ====================
+    // ==================== TRANSFORMATION KZ ====================
 
     // 14: Transfornation KZ Header
     ({ dark = true }) => (
