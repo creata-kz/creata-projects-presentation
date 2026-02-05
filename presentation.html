@@ -1,0 +1,2062 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CREATA VENTURES - 5 Directions</title>
+    <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;500;600;700&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { overflow: hidden; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+const { useState, useEffect } = React;
+
+// ========== ICONS ==========
+const Icons = {
+    chevronLeft: (props) => (
+        <svg width={props.size || 24} height={props.size || 24} viewBox="0 0 24 24" fill="none" stroke={props.color || 'currentColor'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+    ),
+    chevronRight: (props) => (
+        <svg width={props.size || 24} height={props.size || 24} viewBox="0 0 24 24" fill="none" stroke={props.color || 'currentColor'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+    ),
+    check: (props) => (
+        <svg width={props.size || 18} height={props.size || 18} viewBox="0 0 24 24" fill="none" stroke={props.color || 'currentColor'} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+    ),
+    x: (props) => (
+        <svg width={props.size || 18} height={props.size || 18} viewBox="0 0 24 24" fill="none" stroke={props.color || 'currentColor'} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+    ),
+    // Academy
+    graduationCap: (props) => (
+        <svg width={props.size || 24} height={props.size || 24} viewBox="0 0 24 24" fill="none" stroke={props.color || 'currentColor'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+            <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+        </svg>
+    ),
+    // Data/Analytics
+    barChart: (props) => (
+        <svg width={props.size || 24} height={props.size || 24} viewBox="0 0 24 24" fill="none" stroke={props.color || 'currentColor'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="12" y1="20" x2="12" y2="10"></line>
+            <line x1="18" y1="20" x2="18" y2="4"></line>
+            <line x1="6" y1="20" x2="6" y2="16"></line>
+        </svg>
+    ),
+    // GameDev
+    gamepad: (props) => (
+        <svg width={props.size || 24} height={props.size || 24} viewBox="0 0 24 24" fill="none" stroke={props.color || 'currentColor'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="6" y1="12" x2="10" y2="12"></line>
+            <line x1="8" y1="10" x2="8" y2="14"></line>
+            <circle cx="15" cy="13" r="1"></circle>
+            <circle cx="18" cy="11" r="1"></circle>
+            <rect x="2" y="6" width="20" height="12" rx="2"></rect>
+        </svg>
+    ),
+    // Science
+    flask: (props) => (
+        <svg width={props.size || 24} height={props.size || 24} viewBox="0 0 24 24" fill="none" stroke={props.color || 'currentColor'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M9 3h6v6l4 8H5l4-8V3z"></path>
+            <path d="M9 3h6"></path>
+        </svg>
+    ),
+    // Globe/World
+    globe: (props) => (
+        <svg width={props.size || 24} height={props.size || 24} viewBox="0 0 24 24" fill="none" stroke={props.color || 'currentColor'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="2" y1="12" x2="22" y2="12"></line>
+            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+        </svg>
+    ),
+    // Video
+    video: (props) => (
+        <svg width={props.size || 24} height={props.size || 24} viewBox="0 0 24 24" fill="none" stroke={props.color || 'currentColor'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <polygon points="23 7 16 12 23 17 23 7"></polygon>
+            <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+        </svg>
+    ),
+    // Progress/Chart
+    trendingUp: (props) => (
+        <svg width={props.size || 24} height={props.size || 24} viewBox="0 0 24 24" fill="none" stroke={props.color || 'currentColor'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+            <polyline points="17 6 23 6 23 12"></polyline>
+        </svg>
+    ),
+    // Users/Team
+    users: (props) => (
+        <svg width={props.size || 24} height={props.size || 24} viewBox="0 0 24 24" fill="none" stroke={props.color || 'currentColor'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+            <circle cx="9" cy="7" r="4"></circle>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+        </svg>
+    ),
+    // Award/Trophy
+    award: (props) => (
+        <svg width={props.size || 24} height={props.size || 24} viewBox="0 0 24 24" fill="none" stroke={props.color || 'currentColor'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="8" r="7"></circle>
+            <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+        </svg>
+    ),
+    // Bot/AI
+    bot: (props) => (
+        <svg width={props.size || 24} height={props.size || 24} viewBox="0 0 24 24" fill="none" stroke={props.color || 'currentColor'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <rect x="3" y="11" width="18" height="10" rx="2"></rect>
+            <circle cx="12" cy="5" r="2"></circle>
+            <path d="M12 7v4"></path>
+            <line x1="8" y1="16" x2="8" y2="16"></line>
+            <line x1="16" y1="16" x2="16" y2="16"></line>
+        </svg>
+    ),
+    // Refresh/Sync
+    refreshCw: (props) => (
+        <svg width={props.size || 24} height={props.size || 24} viewBox="0 0 24 24" fill="none" stroke={props.color || 'currentColor'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="23 4 23 10 17 10"></polyline>
+            <polyline points="1 20 1 14 7 14"></polyline>
+            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+        </svg>
+    ),
+    // Brain/AI
+    brain: (props) => (
+        <svg width={props.size || 24} height={props.size || 24} viewBox="0 0 24 24" fill="none" stroke={props.color || 'currentColor'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.98-3A2.5 2.5 0 0 1 9.5 2Z"></path>
+            <path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3A2.5 2.5 0 0 0 14.5 2Z"></path>
+        </svg>
+    ),
+    // Target
+    target: (props) => (
+        <svg width={props.size || 24} height={props.size || 24} viewBox="0 0 24 24" fill="none" stroke={props.color || 'currentColor'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <circle cx="12" cy="12" r="6"></circle>
+            <circle cx="12" cy="12" r="2"></circle>
+        </svg>
+    ),
+    // Smartphone
+    smartphone: (props) => (
+        <svg width={props.size || 24} height={props.size || 24} viewBox="0 0 24 24" fill="none" stroke={props.color || 'currentColor'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+            <line x1="12" y1="18" x2="12.01" y2="18"></line>
+        </svg>
+    ),
+    // Sparkles
+    sparkles: (props) => (
+        <svg width={props.size || 24} height={props.size || 24} viewBox="0 0 24 24" fill="none" stroke={props.color || 'currentColor'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"></path>
+            <path d="M5 3v4"></path>
+            <path d="M19 17v4"></path>
+            <path d="M3 5h4"></path>
+            <path d="M17 19h4"></path>
+        </svg>
+    ),
+    // Layout/Grid
+    layoutGrid: (props) => (
+        <svg width={props.size || 24} height={props.size || 24} viewBox="0 0 24 24" fill="none" stroke={props.color || 'currentColor'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <rect x="3" y="3" width="7" height="7"></rect>
+            <rect x="14" y="3" width="7" height="7"></rect>
+            <rect x="14" y="14" width="7" height="7"></rect>
+            <rect x="3" y="14" width="7" height="7"></rect>
+        </svg>
+    ),
+    // Rocket
+    rocket: (props) => (
+        <svg width={props.size || 24} height={props.size || 24} viewBox="0 0 24 24" fill="none" stroke={props.color || 'currentColor'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"></path>
+            <path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"></path>
+            <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"></path>
+            <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"></path>
+        </svg>
+    ),
+    // Lightbulb
+    lightbulb: (props) => (
+        <svg width={props.size || 24} height={props.size || 24} viewBox="0 0 24 24" fill="none" stroke={props.color || 'currentColor'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"></path>
+            <path d="M9 18h6"></path>
+            <path d="M10 22h4"></path>
+        </svg>
+    ),
+    // Handshake
+    handshake: (props) => (
+        <svg width={props.size || 24} height={props.size || 24} viewBox="0 0 24 24" fill="none" stroke={props.color || 'currentColor'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="m11 17 2 2a1 1 0 1 0 3-3"></path>
+            <path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4"></path>
+            <path d="m21 3 1 11h-2"></path>
+            <path d="M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3"></path>
+            <path d="M3 4h8"></path>
+        </svg>
+    ),
+    // Image
+    image: (props) => (
+        <svg width={props.size || 24} height={props.size || 24} viewBox="0 0 24 24" fill="none" stroke={props.color || 'currentColor'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+            <circle cx="8.5" cy="8.5" r="1.5"></circle>
+            <polyline points="21 15 16 10 5 21"></polyline>
+        </svg>
+    ),
+};
+
+// Colors
+const C = {
+    dark: '#0a0a0a',
+    darkCard: '#141414',
+    primary: '#23f5af',
+    accent: '#f97316',
+    light: '#fafafa',
+    text: '#1d1d1f',
+    muted: '#86868b',
+    white: '#ffffff',
+    border: 'rgba(255,255,255,0.1)',
+    red: '#ef4444',
+    green: '#22c55e'
+};
+
+// Fonts
+const F = {
+    heading: "'Unbounded', sans-serif",
+    body: "'Manrope', sans-serif"
+};
+
+// Logo
+const Logo = ({ dark = true, size = 56 }) => (
+    <img
+        src="../cv_logo_white.png"
+        alt="Creata Ventures"
+        style={{
+            width: size,
+            height: size,
+            objectFit: 'contain',
+            filter: dark ? 'none' : 'invert(1)'
+        }}
+    />
+);
+
+// Slide wrapper
+const Slide = ({ children, dark = true }) => (
+    <div style={{
+        width: '100%',
+        height: '100%',
+        background: dark ? C.dark : C.light,
+        color: dark ? C.white : C.text,
+        padding: '40px 72px',
+        display: 'flex',
+        flexDirection: 'column',
+        fontFamily: F.body,
+        overflow: 'hidden'
+    }}>
+        <div style={{
+            width: '100%',
+            maxWidth: 1200,
+            margin: '0 auto',
+            height: '100%',
+            display: 'flex',
+            flexDirection: 'column'
+        }}>
+            {children}
+        </div>
+    </div>
+);
+
+// Section Label
+const SectionLabel = ({ children, dark = true, number }) => (
+    <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: 16,
+        marginBottom: 16
+    }}>
+        {number && (
+            <span style={{
+                fontSize: 56,
+                fontWeight: 700,
+                fontFamily: F.heading,
+                background: `linear-gradient(135deg, ${C.primary}, #06b6d4)`,
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                lineHeight: 1,
+                opacity: 0.9
+            }}>
+                {number}
+            </span>
+        )}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+            <span style={{
+                fontSize: 13,
+                fontWeight: 600,
+                color: C.primary,
+                fontFamily: F.heading,
+                textTransform: 'uppercase',
+                letterSpacing: 3
+            }}>
+                {children}
+            </span>
+            <div style={{
+                width: 50,
+                height: 3,
+                borderRadius: 2,
+                background: `linear-gradient(90deg, ${C.primary}, transparent)`
+            }} />
+        </div>
+    </div>
+);
+
+// Slide Title
+const SlideTitle = ({ children, dark = true, size = 'large' }) => {
+    const sizes = { large: 42, medium: 36, small: 28 };
+    return (
+        <h2 style={{
+            fontSize: sizes[size],
+            fontWeight: 700,
+            fontFamily: F.heading,
+            letterSpacing: '-0.03em',
+            lineHeight: 1.15,
+            margin: 0,
+            marginBottom: 24,
+            background: dark
+                ? `linear-gradient(135deg, ${C.white} 0%, rgba(255,255,255,0.7) 100%)`
+                : `linear-gradient(135deg, ${C.text} 0%, #444 100%)`,
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent'
+        }}>
+            {children}
+        </h2>
+    );
+};
+
+// Problem/Solution Block
+const ProblemSolutionBlock = ({ problems, solutions, dark = true }) => (
+    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24, flex: 1 }}>
+        <div style={{
+            padding: 28,
+            borderRadius: 16,
+            background: dark ? 'rgba(239, 68, 68, 0.08)' : 'rgba(239, 68, 68, 0.05)',
+            border: `1px solid ${dark ? 'rgba(239, 68, 68, 0.2)' : 'rgba(239, 68, 68, 0.15)'}`,
+            display: 'flex',
+            flexDirection: 'column'
+        }}>
+            <div style={{
+                fontSize: 11,
+                fontWeight: 600,
+                color: C.red,
+                fontFamily: F.heading,
+                textTransform: 'uppercase',
+                letterSpacing: 2,
+                marginBottom: 20
+            }}>Проблема</div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+                {problems.map((item, i) => (
+                    <div key={i} style={{
+                        display: 'flex',
+                        alignItems: 'flex-start',
+                        gap: 10,
+                        fontSize: 14,
+                        lineHeight: 1.5,
+                        color: dark ? 'rgba(255,255,255,0.75)' : C.text
+                    }}>
+                        <div style={{ flexShrink: 0, marginTop: 2 }}>
+                            <Icons.x size={16} color={C.red} />
+                        </div>
+                        {item}
+                    </div>
+                ))}
+            </div>
+        </div>
+        <div style={{
+            padding: 28,
+            borderRadius: 16,
+            background: dark ? 'rgba(34, 197, 94, 0.08)' : 'rgba(34, 197, 94, 0.05)',
+            border: `1px solid ${dark ? 'rgba(34, 197, 94, 0.2)' : 'rgba(34, 197, 94, 0.15)'}`,
+            display: 'flex',
+            flexDirection: 'column'
+        }}>
+            <div style={{
+                fontSize: 11,
+                fontWeight: 600,
+                color: C.green,
+                fontFamily: F.heading,
+                textTransform: 'uppercase',
+                letterSpacing: 2,
+                marginBottom: 20
+            }}>Решение</div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+                {solutions.map((item, i) => (
+                    <div key={i} style={{
+                        display: 'flex',
+                        alignItems: 'flex-start',
+                        gap: 10,
+                        fontSize: 14,
+                        lineHeight: 1.5,
+                        color: dark ? 'rgba(255,255,255,0.75)' : C.text
+                    }}>
+                        <div style={{ flexShrink: 0, marginTop: 2 }}>
+                            <Icons.check size={16} color={C.green} />
+                        </div>
+                        {item}
+                    </div>
+                ))}
+            </div>
+        </div>
+    </div>
+);
+
+// Skeleton placeholder
+const SkeletonNote = ({ children }) => (
+    <div style={{
+        background: 'rgba(251, 191, 36, 0.1)',
+        border: '2px dashed rgba(251, 191, 36, 0.4)',
+        borderRadius: 12,
+        padding: 24,
+        textAlign: 'center',
+        color: '#fbbf24',
+        fontSize: 14,
+        fontFamily: F.body,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: '100%',
+        minHeight: 200
+    }}>
+        {children}
+    </div>
+);
+
+// Image Lightbox Context
+const LightboxContext = React.createContext();
+
+const LightboxProvider = ({ children }) => {
+    const [lightboxImage, setLightboxImage] = useState(null);
+    return (
+        <LightboxContext.Provider value={{ lightboxImage, setLightboxImage }}>
+            {children}
+            {lightboxImage && (
+                <div
+                    onClick={() => setLightboxImage(null)}
+                    style={{
+                        position: 'fixed',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        background: 'rgba(0,0,0,0.95)',
+                        zIndex: 9999,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        cursor: 'zoom-out',
+                        padding: 40
+                    }}
+                >
+                    <img
+                        src={lightboxImage.src}
+                        alt={lightboxImage.alt || ''}
+                        style={{
+                            maxWidth: '100%',
+                            maxHeight: '100%',
+                            objectFit: 'contain',
+                            borderRadius: 8,
+                            boxShadow: '0 20px 60px rgba(0,0,0,0.5)'
+                        }}
+                    />
+                    <div style={{
+                        position: 'absolute',
+                        top: 20,
+                        right: 20,
+                        width: 44,
+                        height: 44,
+                        borderRadius: '50%',
+                        background: 'rgba(255,255,255,0.1)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        cursor: 'pointer'
+                    }}>
+                        <Icons.x size={24} color="rgba(255,255,255,0.7)" />
+                    </div>
+                    {lightboxImage.caption && (
+                        <div style={{
+                            position: 'absolute',
+                            bottom: 30,
+                            left: '50%',
+                            transform: 'translateX(-50%)',
+                            padding: '12px 24px',
+                            background: 'rgba(0,0,0,0.7)',
+                            borderRadius: 50,
+                            color: 'rgba(255,255,255,0.8)',
+                            fontSize: 14,
+                            fontFamily: F.body
+                        }}>
+                            {lightboxImage.caption}
+                        </div>
+                    )}
+                </div>
+            )}
+        </LightboxContext.Provider>
+    );
+};
+
+// Clickable Image
+const ClickableImage = ({ src, alt, caption, style, ...props }) => {
+    const { setLightboxImage } = React.useContext(LightboxContext);
+    return (
+        <img
+            src={src}
+            alt={alt}
+            style={{ ...style, cursor: 'zoom-in' }}
+            onClick={(e) => {
+                e.stopPropagation();
+                setLightboxImage({ src, alt, caption });
+            }}
+            {...props}
+        />
+    );
+};
+
+// Flow Step
+const FlowStep = ({ number, title, desc, color = C.primary, dark = true }) => (
+    <div style={{
+        display: 'flex',
+        gap: 14,
+        alignItems: 'flex-start'
+    }}>
+        <div style={{
+            width: 36,
+            height: 36,
+            borderRadius: '50%',
+            background: `${color}20`,
+            border: `2px solid ${color}`,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: 14,
+            fontWeight: 700,
+            fontFamily: F.heading,
+            color: color,
+            flexShrink: 0
+        }}>{number}</div>
+        <div style={{ flex: 1 }}>
+            <div style={{
+                fontSize: 15,
+                fontWeight: 600,
+                fontFamily: F.heading,
+                marginBottom: 4,
+                color: dark ? C.white : C.text
+            }}>{title}</div>
+            <div style={{
+                fontSize: 13,
+                color: dark ? 'rgba(255,255,255,0.55)' : C.muted,
+                lineHeight: 1.5
+            }}>{desc}</div>
+        </div>
+    </div>
+);
+
+// Value Card
+const ValueCard = ({ Icon, title, desc, dark = true, compact = false }) => (
+    <div style={{
+        padding: compact ? 16 : 20,
+        borderRadius: 14,
+        background: dark ? C.darkCard : C.white,
+        border: `1px solid ${dark ? C.border : 'rgba(0,0,0,0.05)'}`,
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column'
+    }}>
+        <div style={{
+            width: compact ? 36 : 40,
+            height: compact ? 36 : 40,
+            borderRadius: 10,
+            background: dark ? 'rgba(35, 245, 175, 0.1)' : 'rgba(35, 245, 175, 0.15)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginBottom: compact ? 10 : 14
+        }}>
+            <Icon size={compact ? 18 : 20} color={C.primary} />
+        </div>
+        <div style={{
+            fontSize: compact ? 13 : 14,
+            fontWeight: 600,
+            fontFamily: F.heading,
+            marginBottom: 6,
+            color: dark ? C.white : C.text
+        }}>{title}</div>
+        <div style={{
+            fontSize: compact ? 11 : 12,
+            color: dark ? 'rgba(255,255,255,0.55)' : C.muted,
+            lineHeight: 1.5
+        }}>{desc}</div>
+    </div>
+);
+
+// ========== SLIDES ==========
+
+const slides = [
+    // 0: Title
+    ({ dark = true }) => (
+        <Slide dark={dark}>
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center' }}>
+                <Logo dark={dark} size={180} />
+                <h1 style={{
+                    marginTop: 32,
+                    fontSize: 42,
+                    fontWeight: 700,
+                    fontFamily: F.heading,
+                    letterSpacing: '-0.03em',
+                    background: `linear-gradient(135deg, ${C.white} 0%, rgba(255,255,255,0.6) 100%)`,
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent'
+                }}>
+                    Проекты компании
+                </h1>
+                <p style={{
+                    marginTop: 28,
+                    fontSize: 15,
+                    color: 'rgba(255,255,255,0.4)',
+                    maxWidth: 500,
+                    lineHeight: 1.5,
+                    fontFamily: F.body,
+                    letterSpacing: 2
+                }}>
+                    AI Academy • DataRoom • GameDev • Munis • Transformation KZ
+                </p>
+            </div>
+        </Slide>
+    ),
+
+    // 1: Overview
+    ({ dark = true }) => {
+        const products = [
+            { num: '01', name: 'AI Academy', desc: 'Образование с AI-лекторами', color: C.primary, Icon: Icons.graduationCap },
+            { num: '02', name: 'DataRoom', desc: 'Мониторинг репутации бренда', color: C.accent, Icon: Icons.barChart },
+            { num: '03', name: 'GameDev', desc: 'Игровая студия', color: '#a855f7', Icon: Icons.gamepad },
+            { num: '04', name: 'Munis', desc: 'Краудфандинг для науки', color: '#3b82f6', Icon: Icons.flask },
+            { num: '05', name: 'Transformation KZ', desc: 'Каталог импакт-проектов', color: '#10b981', Icon: Icons.globe },
+        ];
+        return (
+            <Slide dark={dark}>
+                <div style={{ marginBottom: 16 }}>
+                    <Logo dark={dark} />
+                </div>
+                <SlideTitle dark size="medium">Экосистема продуктов</SlideTitle>
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 12 }}>
+                    {products.map((p, i) => (
+                        <div key={i} style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: 24,
+                            padding: '18px 24px',
+                            borderRadius: 14,
+                            background: C.darkCard,
+                            border: `1px solid ${C.border}`,
+                            transition: 'all 0.2s'
+                        }}>
+                            <div style={{
+                                fontSize: 28,
+                                fontWeight: 700,
+                                fontFamily: F.heading,
+                                color: p.color,
+                                opacity: 0.4,
+                                width: 50,
+                                flexShrink: 0
+                            }}>{p.num}</div>
+                            <div style={{
+                                width: 48,
+                                height: 48,
+                                borderRadius: 12,
+                                background: `${p.color}15`,
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                flexShrink: 0
+                            }}>
+                                <p.Icon size={24} color={p.color} />
+                            </div>
+                            <div style={{ flex: 1 }}>
+                                <div style={{
+                                    fontSize: 20,
+                                    fontWeight: 600,
+                                    fontFamily: F.heading,
+                                    color: C.white,
+                                    marginBottom: 4
+                                }}>{p.name}</div>
+                                <div style={{
+                                    fontSize: 14,
+                                    color: 'rgba(255,255,255,0.5)'
+                                }}>{p.desc}</div>
+                            </div>
+                            <div style={{
+                                width: 8,
+                                height: 8,
+                                borderRadius: '50%',
+                                background: p.color
+                            }} />
+                        </div>
+                    ))}
+                </div>
+            </Slide>
+        );
+    },
+
+    // ==================== AI ACADEMY ====================
+
+    // 2: AI Academy Header
+    ({ dark = true }) => (
+        <Slide dark={dark}>
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center' }}>
+                <div style={{
+                    fontSize: 100,
+                    fontWeight: 800,
+                    fontFamily: F.heading,
+                    background: `linear-gradient(135deg, ${C.primary}, #06b6d4)`,
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    lineHeight: 1,
+                    marginBottom: 20
+                }}>01</div>
+                <h2 style={{
+                    fontSize: 56,
+                    fontWeight: 700,
+                    fontFamily: F.heading,
+                    letterSpacing: '-0.03em',
+                    marginBottom: 16
+                }}>AI Academy</h2>
+                <p style={{ fontSize: 18, color: 'rgba(255,255,255,0.5)', fontFamily: F.body, maxWidth: 650, lineHeight: 1.6 }}>
+                    Образовательная платформа нового поколения, где искусственный интеллект создаёт и ведёт курсы, адаптируя обучение под каждого ученика
+                </p>
+            </div>
+        </Slide>
+    ),
+
+    // 3: AI Academy Problem/Solution
+    ({ dark = true }) => (
+        <Slide dark={dark}>
+            <div style={{ marginBottom: 20 }}>
+                <Logo dark={dark} />
+            </div>
+            <SectionLabel dark number="01">AI Academy</SectionLabel>
+            <SlideTitle dark size="medium">Проблема и решение</SlideTitle>
+            <ProblemSolutionBlock
+                dark={dark}
+                problems={[
+                    'В регионах не хватает хороших преподавателей — качество образования зависит от географии',
+                    'Один учитель не может уделить внимание каждому — кто-то отстаёт, кто-то скучает',
+                    'Создание качественного контента стоит дорого и занимает месяцы',
+                    'Обучение только на одном языке — барьер для казахоязычной аудитории'
+                ]}
+                solutions={[
+                    'AI-лектор доступен 24/7 из любой точки — одинаково качественное обучение для всех',
+                    'Платформа отслеживает прогресс каждого и подстраивает сложность под его уровень',
+                    'AI генерирует видео-лекции, тесты и материалы — контент создаётся в разы быстрее',
+                    'Автоматический перевод и озвучка — ученик выбирает язык обучения'
+                ]}
+            />
+        </Slide>
+    ),
+
+    // 4: AI Academy - Большая идея
+    ({ dark = true }) => (
+        <Slide dark={dark}>
+            <div style={{ marginBottom: 20 }}>
+                <Logo dark={dark} />
+            </div>
+            <SectionLabel dark number="01">AI Academy</SectionLabel>
+            <SlideTitle dark size="medium">Следующая веха образования</SlideTitle>
+            <div style={{ flex: 1, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 40, alignItems: 'center' }}>
+                <div>
+                    <p style={{
+                        fontSize: 16,
+                        color: 'rgba(255,255,255,0.7)',
+                        lineHeight: 1.8,
+                        marginBottom: 28
+                    }}>
+                        Представьте: <strong style={{ color: C.white }}>Исаак Ньютон</strong> объясняет законы гравитации. <strong style={{ color: C.white }}>Абай Кунанбаев</strong> читает свои стихи и рассказывает о казахской философии. <strong style={{ color: C.white }}>Мария Кюри</strong> проводит урок по радиоактивности.
+                    </p>
+                    <p style={{
+                        fontSize: 16,
+                        color: 'rgba(255,255,255,0.7)',
+                        lineHeight: 1.8,
+                        marginBottom: 28
+                    }}>
+                        AI-аватары позволяют оживить любого исторического персонажа или создать идеального преподавателя для конкретной темы. Это не просто видео-курсы — это персонализированное обучение от лучших умов человечества.
+                    </p>
+                    <div style={{
+                        padding: 20,
+                        borderRadius: 14,
+                        background: 'rgba(35, 245, 175, 0.08)',
+                        border: '1px solid rgba(35, 245, 175, 0.2)'
+                    }}>
+                        <div style={{ fontSize: 11, color: C.primary, fontFamily: F.body, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 8 }}>
+                            Ключевая идея
+                        </div>
+                        <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.8)', margin: 0, lineHeight: 1.6 }}>
+                            Качественное образование больше не зависит от географии или доступа к редким специалистам. AI делает лучших преподавателей доступными для каждого.
+                        </p>
+                    </div>
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+                    <ValueCard
+                        Icon={Icons.sparkles}
+                        title="AI-аватары лекторов"
+                        desc="Исторические личности, эксперты, персонажи — любой может стать преподавателем"
+                        dark={dark}
+                        compact
+                    />
+                    <ValueCard
+                        Icon={Icons.globe}
+                        title="Любой язык"
+                        desc="Автоматический перевод и озвучка — один курс на десятках языков"
+                        dark={dark}
+                        compact
+                    />
+                    <ValueCard
+                        Icon={Icons.target}
+                        title="Адаптивность"
+                        desc="Система подстраивает сложность и темп под каждого ученика"
+                        dark={dark}
+                        compact
+                    />
+                    <ValueCard
+                        Icon={Icons.rocket}
+                        title="Масштабируемость"
+                        desc="Один раз создал — учатся миллионы. Без ограничений аудитории"
+                        dark={dark}
+                        compact
+                    />
+                </div>
+            </div>
+        </Slide>
+    ),
+
+    // 5: AI Academy - AI Аватары
+    ({ dark = true }) => (
+        <Slide dark={dark}>
+            <div style={{ marginBottom: 20 }}>
+                <Logo dark={dark} />
+            </div>
+            <SectionLabel dark number="01">AI Academy</SectionLabel>
+            <SlideTitle dark size="medium">Лучшие умы — ваши преподаватели</SlideTitle>
+            <div style={{ flex: 1, display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24 }}>
+                {[
+                    { name: 'Исаак Ньютон', subject: 'Физика и математика', img: 'newton.png' },
+                    { name: 'Абай Кунанбаев', subject: 'Казахская литература', img: 'abay.png' },
+                    { name: 'Мария Кюри', subject: 'Химия и радиоактивность', img: 'curie.png' },
+                ].map((person, i) => (
+                    <div key={i} style={{
+                        background: C.darkCard,
+                        borderRadius: 20,
+                        border: `1px solid ${C.border}`,
+                        overflow: 'hidden',
+                        display: 'flex',
+                        flexDirection: 'column'
+                    }}>
+                        <div style={{
+                            height: 280,
+                            background: `linear-gradient(180deg, rgba(35,245,175,0.05) 0%, transparent 100%)`,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            position: 'relative'
+                        }}>
+                            <SkeletonNote>{person.name}</SkeletonNote>
+                        </div>
+                        <div style={{ padding: 20, textAlign: 'center' }}>
+                            <div style={{
+                                fontSize: 18,
+                                fontWeight: 600,
+                                fontFamily: F.heading,
+                                color: C.white,
+                                marginBottom: 6
+                            }}>{person.name}</div>
+                            <div style={{
+                                fontSize: 13,
+                                color: C.primary,
+                                fontFamily: F.body
+                            }}>{person.subject}</div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </Slide>
+    ),
+
+    // 6: AI Academy - Как это работает
+    ({ dark = true }) => (
+        <Slide dark={dark}>
+            <div style={{ marginBottom: 20 }}>
+                <Logo dark={dark} />
+            </div>
+            <SectionLabel dark number="01">AI Academy</SectionLabel>
+            <SlideTitle dark size="medium">Как это работает</SlideTitle>
+            <div style={{ flex: 1, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 36 }}>
+                <div>
+                    <p style={{
+                        fontSize: 14,
+                        color: 'rgba(255,255,255,0.55)',
+                        lineHeight: 1.6,
+                        marginBottom: 24
+                    }}>
+                        Ученик регистрируется, выбирает направление и начинает обучение. Платформа ведёт его от первого урока до финального проекта.
+                    </p>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+                        <FlowStep
+                            number="1"
+                            title="Ученик выбирает специализацию"
+                            desc="GameDev, видеопроизводство, анимация, издательство или крафт — 5 направлений"
+                            dark={dark}
+                        />
+                        <FlowStep
+                            number="2"
+                            title="AI-лектор ведёт уроки"
+                            desc="Видео-лекции с AI-аватаром на русском или казахском. Смотришь, когда удобно"
+                            dark={dark}
+                        />
+                        <FlowStep
+                            number="3"
+                            title="Платформа проверяет знания"
+                            desc="После каждого урока — тест. Непонятно? Система предложит дополнительные материалы"
+                            dark={dark}
+                        />
+                        <FlowStep
+                            number="4"
+                            title="Командная работа над проектом"
+                            desc="Ученики объединяются в команды и создают реальный продукт — игру, видео или приложение"
+                            dark={dark}
+                        />
+                    </div>
+                </div>
+                <div style={{
+                    background: C.darkCard,
+                    borderRadius: 16,
+                    padding: 24,
+                    border: `1px solid ${C.border}`,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: 14
+                }}>
+                    <div style={{
+                        fontSize: 11,
+                        color: C.primary,
+                        fontFamily: F.body,
+                        textTransform: 'uppercase',
+                        letterSpacing: 1
+                    }}>Что получает ученик</div>
+                    <ValueCard
+                        Icon={Icons.video}
+                        title="Видео-уроки с AI-лектором"
+                        desc="Профессионально озвученные лекции, которые можно пересматривать"
+                        dark={dark}
+                        compact
+                    />
+                    <ValueCard
+                        Icon={Icons.trendingUp}
+                        title="Личный прогресс"
+                        desc="Видно, сколько пройдено, что осталось, где нужно подтянуть"
+                        dark={dark}
+                        compact
+                    />
+                    <ValueCard
+                        Icon={Icons.users}
+                        title="Командное пространство"
+                        desc="Чат с командой, общие файлы, задачи и дедлайны"
+                        dark={dark}
+                        compact
+                    />
+                    <ValueCard
+                        Icon={Icons.award}
+                        title="Портфолио и сертификат"
+                        desc="Реальный проект в портфолио и документ об окончании"
+                        dark={dark}
+                        compact
+                    />
+                </div>
+            </div>
+        </Slide>
+    ),
+
+    // ==================== DATAROOM ====================
+
+    // 6: DataRoom Header
+    ({ dark = true }) => (
+        <Slide dark={dark}>
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center' }}>
+                <div style={{
+                    fontSize: 100,
+                    fontWeight: 800,
+                    fontFamily: F.heading,
+                    background: `linear-gradient(135deg, ${C.accent}, #fb923c)`,
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    lineHeight: 1,
+                    marginBottom: 20
+                }}>02</div>
+                <h2 style={{
+                    fontSize: 56,
+                    fontWeight: 700,
+                    fontFamily: F.heading,
+                    letterSpacing: '-0.03em',
+                    marginBottom: 16
+                }}>DataRoom</h2>
+                <p style={{ fontSize: 18, color: 'rgba(255,255,255,0.5)', fontFamily: F.body, maxWidth: 650, lineHeight: 1.6 }}>
+                    Сервис мониторинга репутации: собирает всё, что пишут о вашем бренде в интернете, и показывает, что об этом думать
+                </p>
+            </div>
+        </Slide>
+    ),
+
+    // 7: DataRoom Problem/Solution
+    ({ dark = true }) => (
+        <Slide dark={dark}>
+            <div style={{ marginBottom: 20 }}>
+                <Logo dark={dark} />
+            </div>
+            <SectionLabel dark number="02">DataRoom</SectionLabel>
+            <SlideTitle dark size="medium">Проблема и решение</SlideTitle>
+            <ProblemSolutionBlock
+                dark={dark}
+                problems={[
+                    'О бренде пишут в десятках мест: Discord, YouTube, Reddit, Twitter — невозможно уследить вручную',
+                    'Негативный отзыв может стать вирусным за часы — узнаёте о проблеме, когда уже поздно',
+                    'Непонятно, как аудитория реагирует на ваши действия — запустили кампанию, а эффект неясен',
+                    'Данные разрозненны — нет единой картины того, что происходит с репутацией'
+                ]}
+                solutions={[
+                    'Система автоматически собирает все упоминания из соцсетей каждые 30 минут — ничего не пропустите',
+                    'AI анализирует тональность и предупреждает о всплеске негатива до того, как он станет проблемой',
+                    'Отмечаете дату запуска кампании — видите, как изменились упоминания, вовлечённость и настроения',
+                    'Единый дашборд: сколько упоминаний, какой sentiment, что обсуждают — полная картина'
+                ]}
+            />
+        </Slide>
+    ),
+
+    // 8: DataRoom - Тезис
+    ({ dark = true }) => (
+        <Slide dark={dark}>
+            <div style={{ marginBottom: 20 }}>
+                <Logo dark={dark} />
+            </div>
+            <SectionLabel dark number="02">DataRoom</SectionLabel>
+            <SlideTitle dark size="medium">Пульс вашего сообщества</SlideTitle>
+            <div style={{ flex: 1, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 40, alignItems: 'center' }}>
+                <div>
+                    <p style={{
+                        fontSize: 16,
+                        color: 'rgba(255,255,255,0.7)',
+                        lineHeight: 1.8,
+                        marginBottom: 28
+                    }}>
+                        Человек физически не может читать тысячи комментариев в день. Он устаёт, теряет фокус, пропускает важное. А один негативный тред на Reddit может за ночь превратиться в репутационный кризис.
+                    </p>
+                    <p style={{
+                        fontSize: 16,
+                        color: 'rgba(255,255,255,0.7)',
+                        lineHeight: 1.8,
+                        marginBottom: 28
+                    }}>
+                        DataRoom работает как <strong style={{ color: C.white }}>цифровой аналитик</strong>, который никогда не спит. Он видит паттерны там, где человек видит хаос. Замечает, что после обновления выросло недовольство в Discord. Понимает, что негатив на YouTube — это 5 человек, а не тренд.
+                    </p>
+                    <div style={{
+                        padding: 20,
+                        borderRadius: 14,
+                        background: 'rgba(249, 115, 22, 0.08)',
+                        border: '1px solid rgba(249, 115, 22, 0.2)'
+                    }}>
+                        <div style={{ fontSize: 11, color: C.accent, fontFamily: F.body, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 8 }}>
+                            Ключевая идея
+                        </div>
+                        <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.8)', margin: 0, lineHeight: 1.6 }}>
+                            Вместо реактивного тушения пожаров — проактивное управление репутацией. Вы узнаёте о проблеме до того, как она станет кризисом.
+                        </p>
+                    </div>
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+                    <ValueCard
+                        Icon={Icons.refreshCw}
+                        title="24/7 мониторинг"
+                        desc="Система не спит, не устаёт, не теряет фокус — каждое упоминание на счету"
+                        dark={dark}
+                        compact
+                    />
+                    <ValueCard
+                        Icon={Icons.brain}
+                        title="AI-анализ контекста"
+                        desc="Не просто ключевые слова — понимание смысла, сарказма, эмоций"
+                        dark={dark}
+                        compact
+                    />
+                    <ValueCard
+                        Icon={Icons.target}
+                        title="Ранние сигналы"
+                        desc="Видите тренд в зародыше — успеваете отреагировать до эскалации"
+                        dark={dark}
+                        compact
+                    />
+                    <ValueCard
+                        Icon={Icons.trendingUp}
+                        title="Измеримый эффект"
+                        desc="Запустили кампанию — видите цифры. Данные вместо ощущений"
+                        dark={dark}
+                        compact
+                    />
+                </div>
+            </div>
+        </Slide>
+    ),
+
+    // 9: DataRoom - Как это работает
+    ({ dark = true }) => (
+        <Slide dark={dark}>
+            <div style={{ marginBottom: 20 }}>
+                <Logo dark={dark} />
+            </div>
+            <SectionLabel dark number="02">DataRoom</SectionLabel>
+            <SlideTitle dark size="medium">Как это работает</SlideTitle>
+            <div style={{ flex: 1, display: 'grid', gridTemplateColumns: '1.1fr 1fr', gap: 36 }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 22 }}>
+                    <FlowStep
+                        number="1"
+                        title="Сбор данных"
+                        desc="Боты подключаются к Discord-серверам, парсят YouTube-комментарии, Reddit-посты и Twitter. Данные собираются каждые 30 минут автоматически."
+                        color={C.accent}
+                        dark={dark}
+                    />
+                    <FlowStep
+                        number="2"
+                        title="Анализ и категоризация"
+                        desc="AI читает каждый комментарий и определяет: позитив, негатив или нейтрально? О чём пишут — о продукте, поддержке, цене? Всё раскладывается по категориям."
+                        color={C.accent}
+                        dark={dark}
+                    />
+                    <FlowStep
+                        number="3"
+                        title="Визуализация в дашборде"
+                        desc="Открываете дашборд: сегодня 450 упоминаний, 78% позитивных, главная тема — новый релиз. Графики показывают динамику."
+                        color={C.accent}
+                        dark={dark}
+                    />
+                    <FlowStep
+                        number="4"
+                        title="AI-рекомендации"
+                        desc="Спрашиваете: «Почему вырос негатив?» — получаете ответ с конкретными примерами и рекомендациями."
+                        color={C.accent}
+                        dark={dark}
+                    />
+                </div>
+                <div style={{
+                    background: C.darkCard,
+                    borderRadius: 16,
+                    padding: 20,
+                    border: `1px solid ${C.border}`
+                }}>
+                    <div style={{
+                        fontSize: 11,
+                        color: C.accent,
+                        fontFamily: F.body,
+                        textTransform: 'uppercase',
+                        letterSpacing: 1,
+                        marginBottom: 14
+                    }}>Пример дашборда</div>
+                    <div style={{ display: 'flex', gap: 6, marginBottom: 14, flexWrap: 'wrap' }}>
+                        {['Discord', 'YouTube', 'Reddit', 'Twitter', 'Twitch'].map((p, i) => (
+                            <span key={i} style={{
+                                padding: '5px 10px',
+                                borderRadius: 50,
+                                background: 'rgba(255,255,255,0.05)',
+                                color: 'rgba(255,255,255,0.5)',
+                                fontSize: 10,
+                                fontFamily: F.body
+                            }}>{p}</span>
+                        ))}
+                    </div>
+                    <div style={{
+                        background: '#0d0d0d',
+                        borderRadius: 10,
+                        padding: 16,
+                        border: `1px solid ${C.border}`
+                    }}>
+                        {[
+                            { name: 'Упоминаний сегодня', value: '450', change: '+200%', up: true, desc: 'vs прошлая неделя' },
+                            { name: 'Вовлечённость', value: '8,700', change: '+248%', up: true, desc: 'лайки, комменты, шеры' },
+                            { name: 'Позитивный sentiment', value: '78%', change: '+13%', up: true, desc: 'было 65%' },
+                            { name: 'Негативные алерты', value: '3', change: '−5', up: false, desc: 'требуют внимания' }
+                        ].map((m, i) => (
+                            <div key={i} style={{
+                                padding: '12px 0',
+                                borderBottom: i < 3 ? `1px solid ${C.border}` : 'none'
+                            }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <span style={{ color: C.muted, fontSize: 12 }}>{m.name}</span>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                                        <span style={{ fontSize: 18, fontWeight: 600 }}>{m.value}</span>
+                                        <span style={{
+                                            padding: '3px 8px',
+                                            borderRadius: 50,
+                                            background: m.up ? 'rgba(34, 197, 94, 0.15)' : 'rgba(239, 68, 68, 0.15)',
+                                            color: m.up ? C.green : C.red,
+                                            fontSize: 10,
+                                            fontWeight: 500
+                                        }}>{m.change}</span>
+                                    </div>
+                                </div>
+                                <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.3)', marginTop: 3 }}>{m.desc}</div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </div>
+        </Slide>
+    ),
+
+    // 10: DataRoom - Скриншоты
+    ({ dark = true }) => (
+        <Slide dark={dark}>
+            <div style={{ marginBottom: 16 }}>
+                <Logo dark={dark} />
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 20 }}>
+                <div>
+                    <SectionLabel dark number="02">DataRoom</SectionLabel>
+                    <SlideTitle dark size="medium">Интерфейс платформы</SlideTitle>
+                </div>
+                <a href="https://corepunkdashboard.netlify.app/" target="_blank" style={{
+                    padding: '10px 20px',
+                    borderRadius: 50,
+                    background: 'rgba(249, 115, 22, 0.1)',
+                    border: '1px solid rgba(249, 115, 22, 0.3)',
+                    color: C.accent,
+                    fontSize: 13,
+                    fontFamily: F.body,
+                    textDecoration: 'none',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 8
+                }}>
+                    <Icons.rocket size={16} color={C.accent} />
+                    Открыть демо
+                </a>
+            </div>
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 10, minHeight: 0, overflow: 'hidden' }}>
+                <div style={{
+                    flex: '1 1 65%',
+                    minHeight: 0,
+                    borderRadius: 14,
+                    overflow: 'hidden',
+                    border: `1px solid ${C.border}`,
+                    position: 'relative',
+                    background: '#0d0d0d'
+                }}>
+                    <ClickableImage
+                        src="Media/DataRoom/DataRoom_mainscreen.jpg"
+                        alt="Главный экран DataRoom"
+                        caption="Главный дашборд"
+                        style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+                    />
+                    <div style={{
+                        position: 'absolute',
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        padding: '10px 14px',
+                        background: 'linear-gradient(transparent, rgba(0,0,0,0.9))',
+                        fontSize: 11,
+                        color: 'rgba(255,255,255,0.7)'
+                    }}>Главный дашборд</div>
+                </div>
+                <div style={{ flex: '1 1 35%', minHeight: 0, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                    <div style={{
+                        borderRadius: 12,
+                        overflow: 'hidden',
+                        border: `1px solid ${C.border}`,
+                        position: 'relative',
+                        background: '#0d0d0d'
+                    }}>
+                        <ClickableImage
+                            src="Media/DataRoom/DataRoom_ии-чат с контекстом происходящего.jpg"
+                            alt="AI чат"
+                            caption="AI-чат с контекстом"
+                            style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+                        />
+                        <div style={{
+                            position: 'absolute',
+                            bottom: 0,
+                            left: 0,
+                            right: 0,
+                            padding: '6px 10px',
+                            background: 'linear-gradient(transparent, rgba(0,0,0,0.9))',
+                            fontSize: 10,
+                            color: 'rgba(255,255,255,0.7)'
+                        }}>AI-чат с контекстом</div>
+                    </div>
+                    <div style={{
+                        borderRadius: 12,
+                        overflow: 'hidden',
+                        border: `1px solid ${C.border}`,
+                        position: 'relative',
+                        background: '#0d0d0d'
+                    }}>
+                        <ClickableImage
+                            src="Media/DataRoom/DataRoom_просмотр конкретной медиа-активности.jpg"
+                            alt="Просмотр медиа-активности"
+                            caption="Детали медиа-активности"
+                            style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+                        />
+                        <div style={{
+                            position: 'absolute',
+                            bottom: 0,
+                            left: 0,
+                            right: 0,
+                            padding: '6px 10px',
+                            background: 'linear-gradient(transparent, rgba(0,0,0,0.9))',
+                            fontSize: 10,
+                            color: 'rgba(255,255,255,0.7)'
+                        }}>Детали медиа-активности</div>
+                    </div>
+                </div>
+            </div>
+        </Slide>
+    ),
+
+    // ==================== GAMEDEV ====================
+
+    // 11: GameDev Header
+    ({ dark = true }) => (
+        <Slide dark={dark}>
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center' }}>
+                <div style={{
+                    fontSize: 100,
+                    fontWeight: 800,
+                    fontFamily: F.heading,
+                    background: `linear-gradient(135deg, #a855f7, #ec4899)`,
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    lineHeight: 1,
+                    marginBottom: 20
+                }}>03</div>
+                <h2 style={{
+                    fontSize: 56,
+                    fontWeight: 700,
+                    fontFamily: F.heading,
+                    letterSpacing: '-0.03em',
+                    marginBottom: 16
+                }}>GameDev</h2>
+                <p style={{ fontSize: 18, color: 'rgba(255,255,255,0.5)', fontFamily: F.body, maxWidth: 650, lineHeight: 1.6 }}>
+                    Внутренняя игровая студия Creata — разрабатываем игры разных жанров для разных платформ
+                </p>
+            </div>
+        </Slide>
+    ),
+
+    // 10: GameDev Studio
+    ({ dark = true }) => (
+        <Slide dark={dark}>
+            <div style={{ marginBottom: 20 }}>
+                <Logo dark={dark} />
+            </div>
+            <SectionLabel dark number="03">GameDev</SectionLabel>
+            <SlideTitle dark size="medium">Игровая студия Creata</SlideTitle>
+            <div style={{ flex: 1, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 36 }}>
+                <div>
+                    <p style={{
+                        fontSize: 15,
+                        color: 'rgba(255,255,255,0.65)',
+                        lineHeight: 1.7,
+                        marginBottom: 24
+                    }}>
+                        Полноценная игровая студия внутри Creata. Разрабатываем игры разных жанров — от казуальных мобильных до масштабных проектов. Текущий фокус на платформах с большой аудиторией.
+                    </p>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+                        <ValueCard
+                            Icon={Icons.smartphone}
+                            title="Telegram Games"
+                            desc="Мини-игры прямо в мессенджере. Миллионы потенциальных игроков уже в Telegram — играют, не выходя из чата."
+                            dark={dark}
+                            compact
+                        />
+                        <ValueCard
+                            Icon={Icons.gamepad}
+                            title="Roblox"
+                            desc="Платформа с 70+ миллионами игроков ежедневно. 85% аудитории — до 25 лет. Делаем игры для нового поколения."
+                            dark={dark}
+                            compact
+                        />
+                    </div>
+                    <div style={{
+                        marginTop: 20,
+                        padding: 18,
+                        borderRadius: 14,
+                        background: 'rgba(168, 85, 247, 0.1)',
+                        border: '1px solid rgba(168, 85, 247, 0.2)'
+                    }}>
+                        <div style={{ fontSize: 11, color: '#a855f7', fontFamily: F.body, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 6 }}>
+                            Цель студии
+                        </div>
+                        <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.7)', margin: 0, lineHeight: 1.5 }}>
+                            Находить талантливых разработчиков и создавать игры, которые приносят удовольствие игрокам и прибыль студии
+                        </p>
+                    </div>
+                </div>
+                <div style={{
+                    borderRadius: 16,
+                    overflow: 'hidden',
+                    border: `1px solid ${C.border}`,
+                    position: 'relative',
+                    background: '#0d0d0d'
+                }}>
+                    <ClickableImage
+                        src="Media/gamedev/overtapped telegram game screen.jpg"
+                        alt="Overtapped - Telegram Game"
+                        caption="Overtapped — Telegram Game"
+                        style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+                    />
+                    <div style={{
+                        position: 'absolute',
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        padding: '12px 16px',
+                        background: 'linear-gradient(transparent, rgba(0,0,0,0.9))',
+                        fontSize: 12,
+                        color: 'rgba(255,255,255,0.7)'
+                    }}>Overtapped — Telegram Game</div>
+                </div>
+            </div>
+        </Slide>
+    ),
+
+    // ==================== MUNIS ====================
+
+    // 11: Munis Header
+    ({ dark = true }) => (
+        <Slide dark={dark}>
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center' }}>
+                <div style={{
+                    fontSize: 100,
+                    fontWeight: 800,
+                    fontFamily: F.heading,
+                    background: `linear-gradient(135deg, #3b82f6, #06b6d4)`,
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    lineHeight: 1,
+                    marginBottom: 20
+                }}>04</div>
+                <h2 style={{
+                    fontSize: 56,
+                    fontWeight: 700,
+                    fontFamily: F.heading,
+                    letterSpacing: '-0.03em',
+                    marginBottom: 16
+                }}>Munis</h2>
+                <p style={{ fontSize: 18, color: 'rgba(255,255,255,0.5)', fontFamily: F.body, maxWidth: 650, lineHeight: 1.6 }}>
+                    Платформа для финансирования научных проектов — учёные публикуют разработки, а люди и организации могут их поддержать
+                </p>
+            </div>
+        </Slide>
+    ),
+
+    // 12: Munis Problem/Solution
+    ({ dark = true }) => (
+        <Slide dark={dark}>
+            <div style={{ marginBottom: 20 }}>
+                <Logo dark={dark} />
+            </div>
+            <SectionLabel dark number="04">Munis</SectionLabel>
+            <SlideTitle dark size="medium">Проблема и решение</SlideTitle>
+            <ProblemSolutionBlock
+                dark={dark}
+                problems={[
+                    'Учёные годами ждут грантов — бюрократия съедает время, которое могло пойти на исследования',
+                    'Научные разработки остаются в стенах лабораторий — о них никто не знает',
+                    'Бизнес и наука существуют параллельно — компании не знают, какие решения уже есть',
+                    'Обычные люди не могут поддержать науку напрямую — нет простого способа помочь'
+                ]}
+                solutions={[
+                    'Учёный публикует проект за час — описание, цель, нужная сумма. Никакой бюрократии',
+                    'Каждый проект получает публичную страницу — можно поделиться, показать инвесторам',
+                    'Бизнес видит каталог разработок по категориям — легко найти решение для своей задачи',
+                    'Любой человек может поддержать проект любой суммой — как Kickstarter, только для науки'
+                ]}
+            />
+        </Slide>
+    ),
+
+    // 13: Munis - Тезис
+    ({ dark = true }) => (
+        <Slide dark={dark}>
+            <div style={{ marginBottom: 20 }}>
+                <Logo dark={dark} />
+            </div>
+            <SectionLabel dark number="04">Munis</SectionLabel>
+            <SlideTitle dark size="medium">Демократизация науки</SlideTitle>
+            <div style={{ flex: 1, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 40, alignItems: 'center' }}>
+                <div>
+                    <p style={{
+                        fontSize: 16,
+                        color: 'rgba(255,255,255,0.7)',
+                        lineHeight: 1.8,
+                        marginBottom: 28
+                    }}>
+                        Сегодня наука финансируется через гранты — долго, сложно, непрозрачно. Учёный тратит месяцы на заявки вместо исследований. А талантливые проекты умирают, не дождавшись денег.
+                    </p>
+                    <p style={{
+                        fontSize: 16,
+                        color: 'rgba(255,255,255,0.7)',
+                        lineHeight: 1.8,
+                        marginBottom: 28
+                    }}>
+                        Munis — это <strong style={{ color: C.white }}>прямой мост</strong> между учёными и теми, кто готов поддержать науку. Студент может собрать деньги на исследование. Компания — найти готовую разработку. Обычный человек — помочь проекту, в который верит.
+                    </p>
+                    <div style={{
+                        padding: 20,
+                        borderRadius: 14,
+                        background: 'rgba(59, 130, 246, 0.08)',
+                        border: '1px solid rgba(59, 130, 246, 0.2)'
+                    }}>
+                        <div style={{ fontSize: 11, color: '#3b82f6', fontFamily: F.body, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 8 }}>
+                            Ключевая идея
+                        </div>
+                        <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.8)', margin: 0, lineHeight: 1.6 }}>
+                            Наука должна быть доступной для финансирования так же, как стартапы. Любой проект заслуживает шанса найти поддержку.
+                        </p>
+                    </div>
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+                    <ValueCard
+                        Icon={Icons.rocket}
+                        title="Быстрый старт"
+                        desc="Публикация проекта за час, а не за месяцы подготовки грантовой заявки"
+                        dark={dark}
+                        compact
+                    />
+                    <ValueCard
+                        Icon={Icons.users}
+                        title="Открытое сообщество"
+                        desc="Учёные, инвесторы, бизнес и энтузиасты на одной платформе"
+                        dark={dark}
+                        compact
+                    />
+                    <ValueCard
+                        Icon={Icons.handshake}
+                        title="Прямое финансирование"
+                        desc="Без посредников и бюрократии — деньги идут напрямую на исследование"
+                        dark={dark}
+                        compact
+                    />
+                    <ValueCard
+                        Icon={Icons.lightbulb}
+                        title="Витрина разработок"
+                        desc="Бизнес находит готовые решения, учёные — коммерческих партнёров"
+                        dark={dark}
+                        compact
+                    />
+                </div>
+            </div>
+        </Slide>
+    ),
+
+    // 14: Munis - Скриншоты
+    ({ dark = true }) => (
+        <Slide dark={dark}>
+            <div style={{ marginBottom: 16 }}>
+                <Logo dark={dark} />
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 20 }}>
+                <div>
+                    <SectionLabel dark number="04">Munis</SectionLabel>
+                    <SlideTitle dark size="medium">Интерфейс платформы</SlideTitle>
+                </div>
+                <a href="https://munisproject.netlify.app/" target="_blank" style={{
+                    padding: '10px 20px',
+                    borderRadius: 50,
+                    background: 'rgba(59, 130, 246, 0.1)',
+                    border: '1px solid rgba(59, 130, 246, 0.3)',
+                    color: '#3b82f6',
+                    fontSize: 13,
+                    fontFamily: F.body,
+                    textDecoration: 'none',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 8
+                }}>
+                    <Icons.rocket size={16} color="#3b82f6" />
+                    Открыть демо
+                </a>
+            </div>
+            <div style={{ flex: 1, display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 20, justifyItems: 'center' }}>
+                <div style={{
+                    borderRadius: 16,
+                    overflow: 'hidden',
+                    border: `1px solid ${C.border}`,
+                    position: 'relative',
+                    background: '#0d0d0d',
+                    display: 'flex',
+                    flexDirection: 'column'
+                }}>
+                    <ClickableImage
+                        src="Media/Munis/Munis_Projects.jpg"
+                        alt="Каталог проектов"
+                        caption="Каталог проектов"
+                        style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+                    />
+                    <div style={{
+                        padding: '10px 14px',
+                        background: C.darkCard,
+                        fontSize: 11,
+                        color: 'rgba(255,255,255,0.7)',
+                        textAlign: 'center',
+                        borderTop: `1px solid ${C.border}`
+                    }}>Каталог проектов</div>
+                </div>
+                <div style={{
+                    borderRadius: 16,
+                    overflow: 'hidden',
+                    border: `1px solid ${C.border}`,
+                    position: 'relative',
+                    background: '#0d0d0d',
+                    display: 'flex',
+                    flexDirection: 'column'
+                }}>
+                    <ClickableImage
+                        src="Media/Munis/Munis_страница проекта.jpg"
+                        alt="Страница проекта"
+                        caption="Страница проекта"
+                        style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+                    />
+                    <div style={{
+                        padding: '10px 14px',
+                        background: C.darkCard,
+                        fontSize: 11,
+                        color: 'rgba(255,255,255,0.7)',
+                        textAlign: 'center',
+                        borderTop: `1px solid ${C.border}`
+                    }}>Страница проекта</div>
+                </div>
+                <div style={{
+                    borderRadius: 16,
+                    overflow: 'hidden',
+                    border: `1px solid ${C.border}`,
+                    position: 'relative',
+                    background: '#0d0d0d',
+                    display: 'flex',
+                    flexDirection: 'column'
+                }}>
+                    <ClickableImage
+                        src="Media/Munis/Munis_страница проблемы которую бизнес хочет решить и обращается к ученым.jpg"
+                        alt="Запрос от бизнеса"
+                        caption="Запрос от бизнеса"
+                        style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+                    />
+                    <div style={{
+                        padding: '10px 14px',
+                        background: C.darkCard,
+                        fontSize: 11,
+                        color: 'rgba(255,255,255,0.7)',
+                        textAlign: 'center',
+                        borderTop: `1px solid ${C.border}`
+                    }}>Запрос от бизнеса</div>
+                </div>
+            </div>
+        </Slide>
+    ),
+
+    // ==================== TRANSFORMATION KZ ====================
+
+    // 14: Transformation KZ Header
+    ({ dark = true }) => (
+        <Slide dark={dark}>
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center' }}>
+                <div style={{
+                    fontSize: 100,
+                    fontWeight: 800,
+                    fontFamily: F.heading,
+                    background: `linear-gradient(135deg, #10b981, #34d399)`,
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    lineHeight: 1,
+                    marginBottom: 20
+                }}>05</div>
+                <h2 style={{
+                    fontSize: 56,
+                    fontWeight: 700,
+                    fontFamily: F.heading,
+                    letterSpacing: '-0.03em',
+                    marginBottom: 16
+                }}>Transformation KZ</h2>
+                <p style={{ fontSize: 18, color: 'rgba(255,255,255,0.5)', fontFamily: F.body, maxWidth: 650, lineHeight: 1.6 }}>
+                    Каталог импакт-проектов Средней Азии — от студенческих инициатив до масштабных социальных программ
+                </p>
+            </div>
+        </Slide>
+    ),
+
+    // 15: Transformation KZ Problem/Solution
+    ({ dark = true }) => (
+        <Slide dark={dark}>
+            <div style={{ marginBottom: 20 }}>
+                <Logo dark={dark} />
+            </div>
+            <SectionLabel dark number="05">Transformation KZ</SectionLabel>
+            <SlideTitle dark size="medium">Проблема и решение</SlideTitle>
+            <ProblemSolutionBlock
+                dark={dark}
+                problems={[
+                    'Социальные проекты умирают от недостатка внимания — хорошие идеи не доходят до тех, кто может помочь',
+                    'Студенты с идеями не знают, куда обратиться — нет единой точки входа',
+                    'Инвесторы, готовые вкладывать в импакт, не видят проекты — информация разрозненна',
+                    'Нет экосистемы социальных инноваций в регионе — каждый проект выживает в одиночку'
+                ]}
+                solutions={[
+                    'Единый каталог проектов с удобным поиском — от экологии до образования, от студентов до НКО',
+                    'Простая регистрация — заполняешь форму, получаешь страницу и доступ к сообществу',
+                    'Инвесторы видят проекты по своим интересам — лёгкий способ найти, во что вложиться',
+                    'Платформа соединяет авторов, менторов, инвесторов и волонтёров — экосистема растёт'
+                ]}
+            />
+        </Slide>
+    ),
+
+    // 16: Transformation KZ - Тезис
+    ({ dark = true }) => (
+        <Slide dark={dark}>
+            <div style={{ marginBottom: 20 }}>
+                <Logo dark={dark} />
+            </div>
+            <SectionLabel dark number="05">Transformation KZ</SectionLabel>
+            <SlideTitle dark size="medium">Инфраструктура для изменений</SlideTitle>
+            <div style={{ flex: 1, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 40, alignItems: 'center' }}>
+                <div>
+                    <p style={{
+                        fontSize: 16,
+                        color: 'rgba(255,255,255,0.7)',
+                        lineHeight: 1.8,
+                        marginBottom: 28
+                    }}>
+                        В Центральной Азии тысячи людей хотят менять мир к лучшему. Студенты запускают экологические инициативы. НКО борются с бедностью. Активисты развивают образование в регионах. Но они не видят друг друга.
+                    </p>
+                    <p style={{
+                        fontSize: 16,
+                        color: 'rgba(255,255,255,0.7)',
+                        lineHeight: 1.8,
+                        marginBottom: 28
+                    }}>
+                        Transformation KZ — это <strong style={{ color: C.white }}>экосистема импакта</strong>. Место, где проекты находят ресурсы, а ресурсы находят проекты. Где студент может связаться с опытным ментором, а инвестор — найти инициативу, которая изменит регион.
+                    </p>
+                    <div style={{
+                        padding: 20,
+                        borderRadius: 14,
+                        background: 'rgba(16, 185, 129, 0.08)',
+                        border: '1px solid rgba(16, 185, 129, 0.2)'
+                    }}>
+                        <div style={{ fontSize: 11, color: '#10b981', fontFamily: F.body, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 8 }}>
+                            Ключевая идея
+                        </div>
+                        <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.8)', margin: 0, lineHeight: 1.6 }}>
+                            Социальные изменения случаются, когда идеи встречаются с ресурсами. Мы строим мост между ними.
+                        </p>
+                    </div>
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+                    <ValueCard
+                        Icon={Icons.globe}
+                        title="Региональный фокус"
+                        desc="Казахстан, Узбекистан, Кыргызстан — проекты всей Центральной Азии"
+                        dark={dark}
+                        compact
+                    />
+                    <ValueCard
+                        Icon={Icons.users}
+                        title="Сообщество"
+                        desc="Авторы, менторы, волонтёры, инвесторы — все участники экосистемы"
+                        dark={dark}
+                        compact
+                    />
+                    <ValueCard
+                        Icon={Icons.target}
+                        title="Умный поиск"
+                        desc="Фильтры по теме, региону, стадии — найти нужный проект за минуту"
+                        dark={dark}
+                        compact
+                    />
+                    <ValueCard
+                        Icon={Icons.award}
+                        title="Витрина достижений"
+                        desc="История успехов региона — вдохновение для новых инициатив"
+                        dark={dark}
+                        compact
+                    />
+                </div>
+            </div>
+        </Slide>
+    ),
+
+    // 17: Transformation KZ - Скриншоты
+    ({ dark = true }) => (
+        <Slide dark={dark}>
+            <div style={{ marginBottom: 16 }}>
+                <Logo dark={dark} />
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 20 }}>
+                <div>
+                    <SectionLabel dark number="05">Transformation KZ</SectionLabel>
+                    <SlideTitle dark size="medium">Интерфейс платформы</SlideTitle>
+                </div>
+                <a href="https://transfornationnew.netlify.app/" target="_blank" style={{
+                    padding: '10px 20px',
+                    borderRadius: 50,
+                    background: 'rgba(16, 185, 129, 0.1)',
+                    border: '1px solid rgba(16, 185, 129, 0.3)',
+                    color: '#10b981',
+                    fontSize: 13,
+                    fontFamily: F.body,
+                    textDecoration: 'none',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 8
+                }}>
+                    <Icons.rocket size={16} color="#10b981" />
+                    Открыть демо
+                </a>
+            </div>
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 10, minHeight: 0, overflow: 'hidden' }}>
+                <div style={{
+                    flex: '1 1 65%',
+                    minHeight: 0,
+                    borderRadius: 14,
+                    overflow: 'hidden',
+                    border: `1px solid ${C.border}`,
+                    position: 'relative',
+                    background: '#0d0d0d'
+                }}>
+                    <ClickableImage
+                        src="Media/Transfornation/TN_mainscreen.jpg"
+                        alt="Главный экран"
+                        caption="Главный экран"
+                        style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+                    />
+                    <div style={{
+                        position: 'absolute',
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        padding: '10px 14px',
+                        background: 'linear-gradient(transparent, rgba(0,0,0,0.9))',
+                        fontSize: 11,
+                        color: 'rgba(255,255,255,0.7)'
+                    }}>Главный экран</div>
+                </div>
+                <div style={{ flex: '1 1 35%', minHeight: 0, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                    <div style={{
+                        borderRadius: 12,
+                        overflow: 'hidden',
+                        border: `1px solid ${C.border}`,
+                        position: 'relative',
+                        background: '#0d0d0d'
+                    }}>
+                        <ClickableImage
+                            src="Media/Transfornation/TN_projectlist.jpg"
+                            alt="Список проектов"
+                            caption="Каталог проектов"
+                            style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+                        />
+                        <div style={{
+                            position: 'absolute',
+                            bottom: 0,
+                            left: 0,
+                            right: 0,
+                            padding: '6px 10px',
+                            background: 'linear-gradient(transparent, rgba(0,0,0,0.9))',
+                            fontSize: 10,
+                            color: 'rgba(255,255,255,0.7)'
+                        }}>Каталог проектов</div>
+                    </div>
+                    <div style={{
+                        borderRadius: 12,
+                        overflow: 'hidden',
+                        border: `1px solid ${C.border}`,
+                        position: 'relative',
+                        background: '#0d0d0d'
+                    }}>
+                        <ClickableImage
+                            src="Media/Transfornation/TN_projectpage_project-overtapped game.jpg"
+                            alt="Страница проекта"
+                            caption="Страница проекта"
+                            style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+                        />
+                        <div style={{
+                            position: 'absolute',
+                            bottom: 0,
+                            left: 0,
+                            right: 0,
+                            padding: '6px 10px',
+                            background: 'linear-gradient(transparent, rgba(0,0,0,0.9))',
+                            fontSize: 10,
+                            color: 'rgba(255,255,255,0.7)'
+                        }}>Страница проекта</div>
+                    </div>
+                </div>
+            </div>
+        </Slide>
+    ),
+
+    // 17: Contact
+    ({ dark = true }) => (
+        <Slide dark={dark}>
+            <div>
+                <Logo dark={dark} />
+            </div>
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center' }}>
+                <h2 style={{
+                    fontSize: 48,
+                    fontWeight: 600,
+                    fontFamily: F.heading,
+                    letterSpacing: '-0.03em',
+                    lineHeight: 1
+                }}>
+                    Давайте строить вместе
+                </h2>
+                <p style={{
+                    marginTop: 20,
+                    fontSize: 16,
+                    color: 'rgba(255,255,255,0.45)',
+                    fontFamily: F.body
+                }}>
+                    Готовы обсудить партнёрство и сотрудничество
+                </p>
+                <div style={{ display: 'flex', gap: 14, marginTop: 36 }}>
+                    <a href="mailto:david@creata.team" style={{
+                        padding: '12px 24px',
+                        borderRadius: 50,
+                        background: C.white,
+                        color: C.text,
+                        fontSize: 14,
+                        fontFamily: F.body,
+                        fontWeight: 500,
+                        textDecoration: 'none'
+                    }}>
+                        david@creata.team
+                    </a>
+                    <a href="https://creata.kz" target="_blank" style={{
+                        padding: '12px 24px',
+                        borderRadius: 50,
+                        background: 'rgba(255,255,255,0.08)',
+                        color: 'rgba(255,255,255,0.7)',
+                        fontSize: 14,
+                        fontFamily: F.body,
+                        textDecoration: 'none',
+                        border: `1px solid ${C.border}`
+                    }}>
+                        creata.kz
+                    </a>
+                </div>
+            </div>
+            <div style={{ textAlign: 'center' }}>
+                <p style={{ color: 'rgba(255,255,255,0.2)', fontSize: 11, fontFamily: F.body }}>
+                    © 2025 Creata Ventures
+                </p>
+            </div>
+        </Slide>
+    ),
+];
+
+// Main App
+function CreataVenturesDeck() {
+    const [currentSlide, setCurrentSlide] = useState(0);
+    const [isAnimating, setIsAnimating] = useState(false);
+    const totalSlides = slides.length;
+
+    const goToSlide = (index) => {
+        if (isAnimating || index === currentSlide) return;
+        if (index < 0 || index >= totalSlides) return;
+        setIsAnimating(true);
+        setCurrentSlide(index);
+        setTimeout(() => setIsAnimating(false), 400);
+    };
+
+    const nextSlide = () => goToSlide(currentSlide + 1);
+    const prevSlide = () => goToSlide(currentSlide - 1);
+
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                prevSlide();
+            }
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [currentSlide, isAnimating]);
+
+    const CurrentSlideComponent = slides[currentSlide];
+
+    return (
+        <div style={{ width: '100vw', height: '100vh', overflow: 'hidden', background: C.dark, position: 'relative' }}>
+            <div style={{
+                width: '100%',
+                height: '100%',
+                opacity: isAnimating ? 0 : 1,
+                transform: isAnimating ? 'scale(0.98)' : 'scale(1)',
+                transition: 'all 0.35s ease-out'
+            }}>
+                <CurrentSlideComponent />
+            </div>
+
+            <button onClick={prevSlide} disabled={currentSlide === 0} style={{
+                position: 'absolute', left: 16, top: '50%', transform: 'translateY(-50%)',
+                width: 44, height: 44, borderRadius: '50%',
+                background: currentSlide === 0 ? 'rgba(255,255,255,0.03)' : 'rgba(255,255,255,0.08)',
+                border: 'none', cursor: currentSlide === 0 ? 'default' : 'pointer',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                opacity: currentSlide === 0 ? 0.3 : 1, transition: 'all 0.2s'
+            }}>
+                <Icons.chevronLeft size={22} color="rgba(255,255,255,0.7)" />
+            </button>
+
+            <button onClick={nextSlide} disabled={currentSlide === totalSlides - 1} style={{
+                position: 'absolute', right: 16, top: '50%', transform: 'translateY(-50%)',
+                width: 44, height: 44, borderRadius: '50%',
+                background: currentSlide === totalSlides - 1 ? 'rgba(255,255,255,0.03)' : 'rgba(255,255,255,0.08)',
+                border: 'none', cursor: currentSlide === totalSlides - 1 ? 'default' : 'pointer',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                opacity: currentSlide === totalSlides - 1 ? 0.3 : 1, transition: 'all 0.2s'
+            }}>
+                <Icons.chevronRight size={22} color="rgba(255,255,255,0.7)" />
+            </button>
+
+            <div style={{ position: 'absolute', bottom: 20, left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: 6, alignItems: 'center' }}>
+                {slides.map((_, i) => (
+                    <button key={i} onClick={() => goToSlide(i)} style={{
+                        width: i === currentSlide ? 20 : 6, height: 6, borderRadius: 3,
+                        background: i === currentSlide ? C.primary : 'rgba(255,255,255,0.2)',
+                        border: 'none', cursor: 'pointer', transition: 'all 0.3s'
+                    }} />
+                ))}
+            </div>
+
+            <div style={{ position: 'absolute', bottom: 20, right: 20, fontSize: 12, fontFamily: F.body, color: 'rgba(255,255,255,0.35)' }}>
+                {currentSlide + 1} / {totalSlides}
+            </div>
+        </div>
+    );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+    <LightboxProvider>
+        <CreataVenturesDeck />
+    </LightboxProvider>
+);
+    </script>
+</body>
+</html>
